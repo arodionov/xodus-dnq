@@ -21,7 +21,15 @@ import com.jetbrains.youtrackdb.internal.core.gremlin.YTDBGraph
 interface YTDBDatabaseProvider {
     val databaseLocation: String
 
-    val graph: YTDBGraph
+    /**
+     * Creates a new [YTDBGraph] instance backed by the same session pool.
+     * Each graph has its own thread-local state, so it can host an independent transaction
+     * on the same thread as another graph instance.
+     *
+     * The returned graph must NOT be closed — [com.jetbrains.youtrackdb.internal.core.gremlin.YTDBGraphEmbedded.close]
+     * would close the shared pool. The session is cleaned up automatically when the transaction commits or aborts.
+     */
+    fun createGraph(): YTDBGraph
 
     fun <R> withSession(block: (DatabaseSessionEmbedded) -> R): R
 

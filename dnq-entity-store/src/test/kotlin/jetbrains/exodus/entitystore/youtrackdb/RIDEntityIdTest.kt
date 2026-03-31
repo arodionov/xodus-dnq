@@ -34,7 +34,7 @@ class RIDEntityIdTest {
         youTrackDb.provider.withSession { oSession ->
             oSession.schema.createVertexClass("type1")
         }
-        val vertex: YTDBVertex = youTrackDb.provider.graph.addVertex("type1")
+        val vertex: YTDBVertex = youTrackDb.provider.createGraph().addVertex("type1")
         assertFailsWith<IllegalStateException> {
             RIDEntityId.fromVertex(vertex)
         }
